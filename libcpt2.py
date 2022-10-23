@@ -64,4 +64,9 @@ def comptage(filename):
 
 
 
-c,p = comptage('/tmp/file_to_analyze.txt')
+c,p = comptage('/winbad/file_to_analyze.txt')
+
+print(c)
+print(p)
+
+
