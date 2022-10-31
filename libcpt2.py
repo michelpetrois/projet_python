@@ -61,12 +61,20 @@ def comptage(filename):
     print("Process time: ", end_time - start_time)
     return c,passwords_length
 
-
+def stat_len_passwd(p):
+    p.astype('float64')
+    nb_len = p.size
+    pourc = ( lambda l_passwd : (l_passwd / nb_len)*100)
+    passwords_pourc = np.array(p, pourc(p))
+    print (passwords_pourc)
+    
 
 
 c,p = comptage('/winbad/file_to_analyze.txt')
 
 print(c)
 print(p)
+
+stat_len_passwd(p)
 
 
