@@ -20,3 +20,5 @@
     - un tableau avec les longueurs de mot de passe
 - mieux gerer les conditions d'echec du back pour retourner de quoi afficher un message propre depuis le front
 - integrer les 2 scripts d'essai : essai_dict2cvulticol.py et essai_numpy.py dans le code du front pour les affichages dans les tabs
+
+...
