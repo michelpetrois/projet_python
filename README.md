@@ -16,9 +16,9 @@
 - gerer le "abort" sur les DL de fichiers ou on a pas la taille (ou alors interdire ce type de fichier)
 - sur la sortie du back faire un return avec 
     - un array pour les caracteres en detail (caractere/nobre)
-    - un ou plusieurs tableaux avec le detail (comptage par type de caractere)
+    - un ou plusieurs tableaux avec le summary (comptage par type de caractere)
     - un tableau avec les longueurs de mot de passe
-- mieux gerer les condition d'echec du back pour retourner de quoi affichier un message propre depuis le front
+- mieux gerer les conditions d'echec du back pour retourner de quoi afficher un message propre depuis le front
 - integrer les 2 scripts d'essai : essai_dict2cvulticol.py et essai_numpy.py dans le code du front pour les affichages dans les tabs
 
 
