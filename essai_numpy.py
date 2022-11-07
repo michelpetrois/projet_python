@@ -17,27 +17,35 @@ def draw_figure(canvas, figure):
 
 def graph1(entete, data):
 
+    # petite astuce pour avoir un explode sur chaque part de camembert
+    nb_slices = np.shape(entete)
+    x_max = np.max(entete)
+    y_max = np.max(data)
+    explode = np.empty(nb_slices)
+    explode.fill(0.2)
+    
     # graph pie dans matplotlib
     figureObject, axesObject = plotter.subplots() # init de la frame pour les graphes, retoure une Figure (frame) et des axes, possible de definr la taille ici
     axesObject.pie(data,          # liste de datas a grapher
                    labels = entete,      # tuple de titres sur les slices
                    startangle=90,       # le demarrage de la rotation des slices
                    autopct = '%1.1f%%', # format et valur de la slice dans la pie
-                   shadow = True)       # petit effet d'ombre, pas terrible sans slices detachees
+                   shadow = True,       # petit effet d'ombre, pas terrible sans slices detachees
+                   explode = explode)
+
     axesObject.set_title('Repartion des tailles')
     axesObject.axis('equal')            # concerve les proportion sur les axes pour pas que les cercles ressembles a des elipses
 #    plotter.show()                      # affichage du graph
 
     # graph histogramme dans matplotlib
-    print(entete)
-    print(data)
     figureObject1, axesObject1 = plotter.subplots() # init de la frame pour les graphes, retoure une Figure (frame) et des axes, possible de definr la taille ici
     axesObject1.bar(entete, data)
 
-    axesObject1.set(xticks=entete,
-                    yticks=data,
+    axesObject1.set(xticks = np.arange(0, x_max+1, 1),
+                    yticks = np.arange(0, y_max+1, 1),
                     xlabel='Taille',
                     ylabel='Nombre')
+
     axesObject1.set_title('Tailles')
     plotter.show()                      # affichage du graph
 

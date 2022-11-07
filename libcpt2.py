@@ -8,7 +8,7 @@ import threading
 
 
 # Version 1.0
-c=col.Counter()
+c = col.Counter()
 
 def read_in_chunks(file_object, chunk_size=1024):
     while True:
@@ -19,12 +19,13 @@ def read_in_chunks(file_object, chunk_size=1024):
 
 def compte(bloc):
     global c,passwords_length
+    print("dans compte",passwords_length)
     local=col.Counter(bloc)
     c+=local
     pwa=np.array(bloc.splitlines())
     get_len = np.vectorize(lambda str: len(str))
     pwl=np.array(get_len(pwa))
-    passwords_length+=pwl
+    passwords_length += pwl
 
 def comptage(filename):
     start_time = t.time()
@@ -33,7 +34,8 @@ def comptage(filename):
     gc.collect()
     ram=list(psutil.virtual_memory())[4]
     file_size =Path(filename).stat().st_size
-    if file_size+(2048*1024*1024) < ram:
+    if file_size+(1024*1024) < ram: # sortir proprement si la taill de la RAM est pas bonne
+    #if file_size+(2048*1024*1024) < ram:
         fd = open(filename, "rb")
         passwords = fd.read()
         passwods_arr = np.array(passwords.splitlines())
@@ -49,6 +51,7 @@ def comptage(filename):
     print(ram,magicn,file_size,ram-magicn,file_size/magicn)
     threads=list()
     with open(filename,"rb") as f:
+        print("dans comptage",passwords_length)
         for passwords in read_in_chunks(f,magicn):
            x = threading.Thread(target=compte, args=(passwords,))
            threads.append(x)
@@ -61,20 +64,20 @@ def comptage(filename):
     print("Process time: ", end_time - start_time)
     return c,passwords_length
 
-def stat_len_passwd(p):
-    p.astype('float64')
-    nb_len = p.size
-    pourc = ( lambda l_passwd : (l_passwd / nb_len)*100)
-    passwords_pourc = np.array(p, pourc(p))
-    print (passwords_pourc)
-    
 
+c,p = comptage('/winbad/rockyou2021_1000.txt')
 
-c,p = comptage('/winbad/file_to_analyze.txt')
+print(str(type(c)))
+print(c) #  voir pour sortir c au format dico genre { valeur_ascii: comptage_caractere, ..... } j'ai deja un bout de code qui sait traiter ca pour en faire un tableau, oun un numpay a 2 dimensions ou 2 numpy
+         # pour la synthese des caracteres (existe pas today)
+         # caracteres imprimables entre 33 et 126 inclus
+         # caracteres alpha maj entre 65 et 90 inclus
+         # caracteres alpha min entre 97 et 122 inclus
+         # caracteres num entre 48 et 57 inclus
+         # caracterss spe sur les autres plages
+         # sortie soit en 2 array a une dimension (un tableau pour le type et un tableau pour le comptage) soit un tableau a 2 dimensions (["alpha_maj", "alpha_min", "num", "spe", "no_print"],[cpt_alpha_maj, cpt_alpha_min, ......]) Aujourd'hui j'ai du code pour traiter 2 tableaux a 1 dimension
+print(str(type(p)))
+print(p) # en l'etat c'est gerable
 
-print(c)
-print(p)
-
-stat_len_passwd(p)
 
 
