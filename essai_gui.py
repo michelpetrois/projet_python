@@ -4,14 +4,57 @@ import urllib3
 import sys
 import io
 from libcpt import *
+import numpy as np
+import matplotlib.pyplot as plotter
+from matplotlib.ticker import NullFormatter  
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import matplotlib
+matplotlib.use('TkAgg')
 
 
 # vars
 core_number = os.cpu_count()
 mess = {}
-mess["EN"]={'1': 'Select local File to Analyze', '2': 'Downloading file', '3': 'Abort Download ?', '4': 'Select local File to Analyze', '5': 'OR', '6': 'Give the URL of the input file', '7': 'Launch Analyze', '8': 'Output Matrix', '9': 'Output Graphs', '10': 'Select Theme Name', '11': 'Select The Language', '12': 'English', '13': 'French', '14': 'Refresh Settings', '15': 'Input', '16': 'Settings', '17': 'No Filename', '18': 'File not found', '19': 'Browse'}
-mess["FR"]={'1': 'Sélectionner le fichier local à analyser', '2': 'Téléchargement en cours', '3': 'Abandon du téléchargeent ?', '4': 'Choisir le fichier lacal à analyser', '5': 'OU', '6': "Fournir l'URL du fichier à analyser", '7': "Lancer l'analyse", '8': 'Sortie Tableau', '9': 'Sortie Graphe', '10': 'Choix du theme', '11': 'Choix du langage', '12': 'Anglais', '13': 'Français', '14': "Relancer l'interface", '15': 'Entrée', '16': 'Paramètres', '17': 'Nom de fichier manquant', '18': 'Fichier introuvable', '19': 'Parcourir'}
+mess["EN"]={'1': 'Select local File to Analyze', '2': 'Downloading file', '3': 'Abort Download ?', '4': 'Select local File to Analyze', '5': 'OR', '6': 'Give the URL of the input file', '7': 'Launch Analyze', '8': 'Output Matrix', '9': 'Output Graphs', '10': 'Select Theme Name', '11': 'Select The Language', '12': 'English', '13': 'French', '14': 'Refresh Settings', '15': 'Input', '16': 'Settings', '17': 'No Filename', '18': 'File not found', '19': 'Browse', '20': 'Passwords by size'}
+mess["FR"]={'1': 'Sélectionner le fichier local à analyser', '2': 'Téléchargement en cours', '3': 'Abandon du téléchargeent ?', '4': 'Choisir le fichier lacal à analyser', '5': 'OU', '6': "Fournir l'URL du fichier à analyser", '7': "Lancer l'analyse", '8': 'Sortie Tableau', '9': 'Sortie Graphe', '10': 'Choix du theme', '11': 'Choix du langage', '12': 'Anglais', '13': 'Français', '14': "Relancer l'interface", '15': 'Entrée', '16': 'Paramètres', '17': 'Nom de fichier manquant', '18': 'Fichier introuvable', '19': 'Parcourir', '20': 'Mots de passe par taille'}
 lang = "FR"
+control=""
+
+
+# integrate matplotlib figure into a pysimplegui canvas
+def draw_figure(canvas, figure):
+    figure_canvas_agg = FigureCanvasTkAgg(figure, canvas)
+    figure_canvas_agg.draw()
+    figure_canvas_agg.get_tk_widget().pack(side='top', fill='both', expand=1)
+    return figure_canvas_agg
+
+# drawing a pie
+def graph_pie(entete, data, graph_label, canvas_label):
+
+    # data integration
+    nb_slices = np.shape(entete)
+    x_max = np.max(entete)
+    y_max = np.max(data)
+    explode = np.empty(nb_slices)
+    explode.fill(0.2)
+
+    # graph pie using matplotlib
+    figureObject, axesObject = plotter.subplots() 
+    axesObject.pie(data,          
+                   labels = entete,
+                   startangle=90,
+                   autopct = '%1.1f%%',
+                   shadow = True,
+                   explode = explode)
+
+    axesObject.set_title(graph_label)
+    axesObject.axis('equal')
+
+    # complete the tab layout
+    tab3_layout.append([sg.Canvas(key=canvas_label)])
+    # adding matplotlib graph to the canvas
+    fig_canvas_agg = draw_figure(window[canvas_label].TKCanvas, figureObject) # on passe en argument la Figure qu'on a defini pour le graph matplotlib
+
 
 def dl_file(url_file,chunk_size,out_file):
     go_dl = False

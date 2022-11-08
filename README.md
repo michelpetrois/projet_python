@@ -8,6 +8,7 @@
 - essai_gui2.py : demo gestion windows
 - demo_pie.py : demo de matplotlib camembert
 - demo_histo.py : demo de matplotlib histogramme
+- essai_omg.py : essai d'affichage d'une image subliminale stockée dans une variable
 ## Code projet utilisable
 - essai_gui.py  : partie graphique
 - libcpt2.py    : partie back avec fichier entree en dur
@@ -20,5 +21,3 @@
     - un tableau avec les longueurs de mot de passe
 - mieux gerer les conditions d'echec du back pour retourner de quoi afficher un message propre depuis le front
 - integrer les 2 scripts d'essai : essai_dict2cvulticol.py et essai_numpy.py dans le code du front pour les affichages dans les tabs
-
-...
