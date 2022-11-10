@@ -96,3 +96,10 @@ def comptage(filename):
     e=calc(c)
     return 0,d,passwords_length,e
 
+cr, data, lenght, error = comptage('/winbad/bidon_secured.pdf')
+
+print (str(type(cr)),cr)
+print (str(type(data)),data)
+print (str(type(lenght)),lenght)
+print (str(type(error)),error)
+

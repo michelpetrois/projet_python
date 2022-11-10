@@ -16,7 +16,7 @@ matplotlib.use('TkAgg')
 core_number = os.cpu_count()
 mess = {}
 mess["EN"]={'1': 'Select local File to Analyze', '2': 'Downloading file', '3': 'Abort Download ?', '4': 'Select local File to Analyze', '5': 'OR', '6': 'Give the URL of the input file', '7': 'Launch Analyze', '8': 'Output Matrix', '9': 'Output Graphs', '10': 'Select Theme Name', '11': 'Select The Language', '12': 'English', '13': 'French', '14': 'Refresh Settings', '15': 'Input', '16': 'Settings', '17': 'No Filename', '18': 'File not found', '19': 'Browse', '20': 'Passwords by size'}
-mess["FR"]={'1': 'Sélectionner le fichier local à analyser', '2': 'Téléchargement en cours', '3': 'Abandon du téléchargeent ?', '4': 'Choisir le fichier lacal à analyser', '5': 'OU', '6': "Fournir l'URL du fichier à analyser", '7': "Lancer l'analyse", '8': 'Sortie Tableau', '9': 'Sortie Graphe', '10': 'Choix du theme', '11': 'Choix du langage', '12': 'Anglais', '13': 'Français', '14': "Relancer l'interface", '15': 'Entrée', '16': 'Paramètres', '17': 'Nom de fichier manquant', '18': 'Fichier introuvable', '19': 'Parcourir', '20': 'Mots de passe par taille'}
+mess["FR"]={'1': 'Sélectionner le fichier local à analyser', '2': 'Téléchargement en cours', '3': 'Abandon du téléchargeent ?', '4': 'Choisir le fichier local à analyser', '5': 'OU', '6': "Fournir l'URL du fichier à analyser", '7': "Lancer l'analyse", '8': 'Sortie Tableau', '9': 'Sortie Graphe', '10': 'Choix du theme', '11': 'Choix du langage', '12': 'Anglais', '13': 'Français', '14': "Relancer l'interface", '15': 'Entrée', '16': 'Paramètres', '17': 'Nom de fichier manquant', '18': 'Fichier introuvable', '19': 'Parcourir', '20': 'Mots de passe par taille'}
 lang = "FR"
 control=""
 layout=[]
