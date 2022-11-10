@@ -8,7 +8,7 @@ img = 'iVBORw0KGgoAAAANSUhEUgAAAfQAAAILCAMAAAApJJ7pAAAAAXNSR0IArs4c6QAAADNQTFRFR
 layout_img = [[sg.Button('', image_data=img, key='-GRAPH-')]]
 
 
-window = sg.Window("", layout_img, no_titlebar=True)
+window = sg.Window("THE TEAM !", layout_img)
 
 
 while True:

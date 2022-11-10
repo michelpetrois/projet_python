@@ -19,6 +19,8 @@ mess["EN"]={'1': 'Select local File to Analyze', '2': 'Downloading file', '3': '
 mess["FR"]={'1': 'Sélectionner le fichier local à analyser', '2': 'Téléchargement en cours', '3': 'Abandon du téléchargeent ?', '4': 'Choisir le fichier lacal à analyser', '5': 'OU', '6': "Fournir l'URL du fichier à analyser", '7': "Lancer l'analyse", '8': 'Sortie Tableau', '9': 'Sortie Graphe', '10': 'Choix du theme', '11': 'Choix du langage', '12': 'Anglais', '13': 'Français', '14': "Relancer l'interface", '15': 'Entrée', '16': 'Paramètres', '17': 'Nom de fichier manquant', '18': 'Fichier introuvable', '19': 'Parcourir', '20': 'Mots de passe par taille'}
 lang = "FR"
 control=""
+layout=[]
+tab3_layout=[]
 
 
 # integrate matplotlib figure into a pysimplegui canvas
@@ -30,6 +32,8 @@ def draw_figure(canvas, figure):
 
 # drawing a pie
 def graph_pie(entete, data, graph_label, canvas_label):
+
+    global layout, tab3_layout, window
 
     # data integration
     nb_slices = np.shape(entete)
@@ -51,7 +55,12 @@ def graph_pie(entete, data, graph_label, canvas_label):
     axesObject.axis('equal')
 
     # complete the tab layout
+    print("tab3_layout",tab3_layout)
+    print('layout',layout)
     tab3_layout.append([sg.Canvas(key=canvas_label)])
+    print("tab3_layout",tab3_layout)
+    print('layout',layout)
+    window.refresh()
     # adding matplotlib graph to the canvas
     fig_canvas_agg = draw_figure(window[canvas_label].TKCanvas, figureObject) # on passe en argument la Figure qu'on a defini pour le graph matplotlib
 
@@ -98,7 +107,12 @@ def dl_file(url_file,chunk_size,out_file):
     if not go_dl:
         os.remove(out_file)
 
+def data_to_graph(cr, chars, passwd):
+    entete, cumul = np.unique(passwd, return_counts=True)
+    graph_pie(entete, cumul, mess[lang]['20'], '-CANVAS1-')
+
 def main_window(lang="EN",theme=None) :
+    global layout, tab3_layout, window
     #sg.theme('Dark Amber')  # Let's set our own color theme
     sg.theme(new_theme = theme)
     theme_list = sg.theme_list()
@@ -127,11 +141,11 @@ def main_window(lang="EN",theme=None) :
     layout = [[sg.TabGroup(tab_group_layout,
                            enable_events=True,
                            key='-TABGROUP-'),
-                           sg.Sizegrip()]
-             ]
+                           sg.Sizegrip()]]
+
+
 
     # create the window
-#    window = sg.Window('Static analysis of a file', layout, resizable=True)
     window = sg.Window(mess[lang]["1"], layout, resizable=True)
     
     while True:
@@ -153,7 +167,6 @@ def main_window(lang="EN",theme=None) :
                 if values['-URL-'] == '':
                     sg.popup(mess[lang]['17'], no_titlebar=True, keep_on_top=True)
                 else:
-                    print("DANS URL")
                     file_url = values['-URL-']
                     if not os.path.isdir('/tmp'):
                         os.makedirs('/tmp')
@@ -165,6 +178,7 @@ def main_window(lang="EN",theme=None) :
                 filename = values['-BROWSEINPUT-']
             if os.path.exists(filename):
                 dict_letter, numpy_cpt = comptage(filename)
+                data_to_graph(0, dict_letter, numpy_cpt) 
             else:
                 sg.popup(mess[lang]['18'], no_titlebar=True, keep_on_top=True)
 
