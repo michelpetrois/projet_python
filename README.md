@@ -22,3 +22,8 @@
 - integrer les 2 scripts d'essai : essai_dict2cvulticol.py et essai_numpy.py dans le code du front pour les affichages dans les tabs
 
 ...
+	 # caracteres imprimables entre 32 et 126 inclus
+         # caracteres alpha maj entre 65 et 90 inclus
+         # caracteres alpha min entre 97 et 122 inclus
+         # caracteres num entre 48 et 57 inclus
+         # caracterss spe sur les autres plages
