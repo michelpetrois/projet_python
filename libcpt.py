@@ -1,15 +1,20 @@
 import gc
 import psutil
 from pathlib import Path
-import time as t
 import numpy as np
 import collections as col
 import threading
 
-
-# Version 1.1
+# Version 0.x : tests, benchs wtih chunck size and threads
+# Version 1.0 : Lecture en une fois et thread si file trop gros
+# Version 1.1 : Bug avec numpy corrigé dans thread, ajout du calcul MAJ,min....
+# Version 1.2 : Exception sur IO et Threads (intégré dans lib en fait)
+# Version 1.3 : Nettoyage du code
+# Var globales a cause threads
 c=col.Counter()
 passwords_length=np.array(0)
+e=dict()
+d=dict()
 
 def read_in_chunks(file_object, chunk_size=1024):
     while True:
@@ -54,46 +59,40 @@ def compte(bloc):
     pwa=np.array(bloc.splitlines())
     get_len = np.vectorize(lambda str: len(str))
     pwl=np.array(get_len(pwa))
-    print(passwords_length)
-    print(pwl)
     passwords_length=np.add(passwords_length,pwl)
 
 def comptage(filename):
-    start_time = t.time()
-    global c, passwords_length
-    # Optimisation section
+    global c, passwords_length,e,d
     gc.collect()
     ram=list(psutil.virtual_memory())[4]
-    file_size =Path(filename).stat().st_size
+    try:
+        file_size =Path(filename).stat().st_size
+    except (IOError,FileNotFoundError) as exc:
+        e["Erreur"]=exc
+        return 1,d,passwords_length,e
     if (2*file_size) < ram:
-        fd = open(filename, "rb")
+        try:
+            fd = open(filename, "rb")
+        except (IOError,FileNotFoundError) as exc:
+            e["Erreur"]=exc
+            return 1, d, passwords_length, e
         passwords = fd.read()
-        passwods_arr = np.array(passwords.splitlines())
-        get_len = np.vectorize(lambda str: len(str))
-        passwords_length = np.array(get_len(passwods_arr))
-        c=col.Counter(passwords)
-        end_time = t.time()
-        print("Process time: ", end_time - start_time)
-        d = dict(c)
-        e=calc(c)
-        return 0,d,passwords_length,e
-
-    #magicn=int(ram/4)
-    magicn=256*1024*1024
-    print(ram,magicn,file_size,ram-magicn,file_size/magicn)
-    threads=list()
-    with open(filename,"rb") as f:
-        for passwords in read_in_chunks(f,magicn):
-           x = threading.Thread(target=compte, args=(passwords,))
-           threads.append(x)
-           x.start()
-           end_time = t.time()
-           print("Process time: ", end_time - start_time)
-    for index, thread in enumerate(threads):
-        thread.join()
-    end_time = t.time()
-    print("Process time: ", end_time - start_time)
+        compte(passwords)
+    else:
+        magicn=256*1024*1024
+        threads=list()
+        try:
+            with open(filename,"rb") as fd:
+                for passwords in read_in_chunks(fd,magicn):
+                    x = threading.Thread(target=compte, args=(passwords,))
+                    threads.append(x)
+                    x.start()
+        except (IOError,OSError,FileNotFoundError) as exc:
+            e["Erreur"] = exc
+            return 1, d, passwords_length, e
+        for index, thread in enumerate(threads):
+            thread.join()
     d=dict(c)
-    e=calc(d)
+    e=calc(c)
     return 0,d,passwords_length,e
 
