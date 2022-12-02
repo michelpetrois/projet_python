@@ -10,6 +10,7 @@ import threading
 # Version 1.1 : Bug avec numpy corrigé dans thread, ajout du calcul MAJ,min....
 # Version 1.2 : Exception sur IO et Threads (intégré dans lib en fait)
 # Version 1.3 : Nettoyage du code
+
 # Var globales a cause threads
 c=col.Counter()
 passwords_length=np.array(0)
