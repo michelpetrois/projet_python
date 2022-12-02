@@ -45,13 +45,16 @@ def calc(dico):
         imprim+=dico[i]
     for i in range(123,126):
         imprim+=dico[i]
-    di["Imprimables"]=imprim
+    di["Caracteres"]=imprim
     autres=0
     for i in range(0,31):
         autres+=dico[i]
-    for i in range(127,255):
+    autres+=dico[127]
+    di["Caractere Controle"]=autres
+    autres=0
+    for i in range(128,255):
         autres+=dico[i]
-    di["Autres"]=autres
+    di["ASCII Etendu"]=autres
     return di
 def compte(bloc):
     global c,passwords_length
