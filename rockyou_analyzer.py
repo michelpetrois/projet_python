@@ -17,9 +17,9 @@ import csv
 lang='EN'
 core_number = os.cpu_count()
 mess = {}
-mess["EN"]={'1': 'Characters Analysis', '2': 'Downloading file', '3': 'Abort Download ?', '4': 'Select local File to Analyze', '5': 'OR', '6': 'Give the URL of the input file', '7': 'Launch Analyze', '8': 'Character Types', '9': 'Output Graphs', '10': 'Select Theme Name', '11': 'Select The Language', '12': 'English', '13': 'French', '14': 'Refresh Settings', '15': 'Input', '16': 'Settings', '17': 'No Filename', '18': 'File not found', '19': 'Browse', '20': 'Passwords by size', '21': 'Uppercase', '22': 'Lowercase', '23': 'Digits', '24': 'Characters', '25': 'Control', '26': 'Extended', '27': 'Character count', '28': 'Char', '29': 'Count', '30': 'Output Tables', "31": 'Font Choice', '32': 'Font size', '33': 'Types', '34': 'Numbers', '35': 'Caracteres by type', '36': 'length', '37': 'Export to CVS', '38': 'Error processing datas', '39': 'No access to tmp dir', '40': 'Success', '41': 'Failed'}
+mess["EN"]={'1': 'Characters Analysis', '2': 'Downloading file', '3': 'Abort Download ?', '4': 'Select local File to Analyze', '5': 'OR', '6': 'Give the URL of the input file', '7': 'Launch Analyze', '8': 'Character Types', '9': 'Output Graphs', '10': 'Select Theme Name', '11': 'Select The Language', '12': 'English', '13': 'French', '14': 'Refresh Settings', '15': 'Input', '16': 'Settings', '17': 'No Filename', '18': 'File not found', '19': 'Browse', '20': 'Passwords by size', '21': 'Uppercase', '22': 'Lowercase', '23': 'Digits', '24': 'Characters', '25': 'Control', '26': 'Extended', '27': 'Character count', '28': 'Char', '29': 'Count', '30': 'Output Tables', "31": 'Font Choice', '32': 'Font size', '33': 'Types', '34': 'Numbers', '35': 'Caracteres by type', '36': 'length', '37': 'Export to CVS', '38': 'Error processing datas', '39': 'No access to tmp dir', '40': 'CSV files are on /tmp directory', '41': 'Failed'}
 
-mess["FR"]={'1': "Analyse des caractères d'un fichier", '2': 'Téléchargement en cours', '3': 'Abandon du téléchargeent ?', '4': 'Choisir le fichier lacal à analyser', '5': 'OU', '6': "Fournir l'URL du fichier à analyser", '7': "Lancer l'analyse", '8': 'Types de caractères', '9': 'Sortie Graphes', '10': 'Choix du theme', '11': 'Choix du langage', '12': 'Anglais', '13': 'Français', '14': "Relancer l'interface", '15': 'Entrée', '16': 'Paramètres', '17': 'Nom de fichier manquant', '18': 'Fichier introuvable', '19': 'Parcourir', '20': 'Mots de passe par taille', '21': 'Majuscules', '22': 'Minuscules', '23': 'Numérique', '24': 'Caractères', '25': 'Contrôle', '26': 'Etendus', '27': 'Comptage des caractères', '28': 'Carac', '29': 'Compt', '30': 'Sortie Tableaux', '31': 'Choix de la police', '32': 'Taille de la police', '33': 'Types', '34': 'Occurences', '35': 'Caractères par types', '36': 'Longueur', '37': 'Exporter en CSV', '38': 'Erreur dans le traitement des données', '39': 'repertoire tmp inaccessible', '40': 'Reussi', '41': 'En echec' }
+mess["FR"]={'1': "Analyse des caractères d'un fichier", '2': 'Téléchargement en cours', '3': 'Abandon du téléchargement ?', '4': 'Choisir le fichier local à analyser', '5': 'OU', '6': "Fournir l'URL du fichier à analyser", '7': "Lancer l'analyse", '8': 'Types de caractères', '9': 'Sortie Graphes', '10': 'Choix du theme', '11': 'Choix du langage', '12': 'Anglais', '13': 'Français', '14': "Relancer l'interface", '15': 'Entrée', '16': 'Paramètres', '17': 'Nom de fichier manquant', '18': 'Fichier introuvable', '19': 'Parcourir', '20': 'Mots de passe par taille', '21': 'Majuscules', '22': 'Minuscules', '23': 'Numérique', '24': 'Caractères', '25': 'Contrôle', '26': 'Etendus', '27': 'Comptage des caractères', '28': 'Carac', '29': 'Compt', '30': 'Sortie Tableaux', '31': 'Choix de la police', '32': 'Taille de la police', '33': 'Types', '34': 'Occurences', '35': 'Caractères par types', '36': 'Longueur', '37': 'Exporter en CSV', '38': 'Erreur dans le traitement des données', '39': 'repertoire tmp inaccessible', '40': 'Les fichiers CSV sont dans le répertoire /tmp', '41': 'En echec' }
 
 control=""
 layout=[]
@@ -29,7 +29,7 @@ table_1=[]
 table_2=[]
 summary_dict={}
 font_name="Courier"
-font_size=25
+font_size=12
 
 def export_to_csv(entete, data, output_file):
     cr = True
@@ -146,8 +146,8 @@ def draw_figure(canvas, figure, side_pos):
     return figure_canvas_agg
 
 
-def main_window(lang='EN',theme=None,font_name='courier',font_size=25) :
-    global window, table_1, table_2, summary_dict
+def main_window(lang='EN',theme=None,font_name='courier') :
+    global window, table_1, table_2, summary_dict, font_size
     sg.theme(new_theme = theme)
     # The tab 1, 2, 3 layouts - what goes inside the tab
     tab1_layout = [[sg.Text(mess[lang]['4'], font=(font_name, font_size))],
@@ -173,7 +173,7 @@ def main_window(lang='EN',theme=None,font_name='courier',font_size=25) :
                    [sg.Canvas(key='-GRAPH1-',expand_y=True)]]
     tab4_layout = [[ sg.Text(mess[lang]['10'], font=(font_name, font_size)), sg.Combo(values=sg.theme_list(), default_value='Random',auto_size_text=True, k='-THEME LIST-')],
                    [ sg.Text(mess[lang]['31'], font=(font_name, font_size)), sg.Combo(values=sg.Text.fonts_installed_list(), default_value='Courier', auto_size_text=True, key='-FONT_NAME-')],
-                   [ sg.Text(mess[lang]['32'], font=(font_name, font_size)), sg.Spin([i for i in range(8,32,2)], initial_value=25, key='-FONT_SIZE-')],
+                   [ sg.Text(mess[lang]['32'], font=(font_name, font_size)), sg.Spin([i for i in range(8,32,2)], initial_value=font_size, key='-FONT_SIZE-')],
                    [ sg.Text(mess[lang]['11'], font=(font_name, font_size)), sg.Radio(mess[lang]['12'],'Language', key='-LANG_EN-', font=(font_name, font_size)), sg.Radio(mess[lang]['13'],'Language', key='-LANG_FR-', font=(font_name, font_size))],
                    [ sg.VPush(), sg.Button(mess[lang]['14'], key='-REFRESH-', font=(font_name, font_size))]]
 
@@ -216,7 +216,7 @@ def main_window(lang='EN',theme=None,font_name='courier',font_size=25) :
             dict_letter={}
             summary_dict={}
             window.close()
-            main_window(lang, new_theme, font_name, font_size)
+            main_window(lang, new_theme, font_name)
         if event == '-LAUNCH-':
             if values['-BROWSEINPUT-'] == '':
                 if values['-URL-'] == '':
@@ -268,7 +268,8 @@ def main_window(lang='EN',theme=None,font_name='courier',font_size=25) :
                             data_full.append([prn_elem, dict_letter[elem]])
                         cr_write = export_to_csv(entete_full, data_full,'/tmp/full_data.csv')
                     if cr_write:
-                        sg.popup(mess[lang]['40'], no_titlebar=True, keep_on_top=True)
+                        sg.popup(mess[lang]['40'], no_titlebar=True, keep_on_top=True, background_color = 'green', text_color = 'black')
+                        window['-TAB2-'].update(background_color = 'yellow')
                     else:
                         sg.popup(mess[lang]['41'], no_titlebar=True, keep_on_top=True)
 
