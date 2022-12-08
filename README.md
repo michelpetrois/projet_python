@@ -1,5 +1,12 @@
 ## Code projet utilisable
-- rockyou_analyzer.py    : partie front
-- libcpt.py              : partie back 
+- rockyou_analyzer.py    : partie front premiere version
+- libcpt.py              : partie back
+- new_version.py         : partie front nouvelle version
 ### A faire
-- gerer le "abort" sur les DL de fichiers ou on a pas la taille (ou alors interdire ce type de fichier)
+
+### Prerequis
+- le code est developper en python3
+- installation d'un venv python (best practice)
+  - python3 -m venv /path/to/new/virtual/environment
+- installation des dependances python
+  - pip install -r requirements.txt
