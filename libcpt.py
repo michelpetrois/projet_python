@@ -10,6 +10,7 @@ import threading
 # Version 1.1 : Bug avec numpy corrigé dans thread, ajout du calcul MAJ,min....
 # Version 1.2 : Exception sur IO et Threads (intégré dans lib en fait)
 # Version 1.3 : Nettoyage du code
+# Version 1.4 : RAZ var globale + utilisation de numpy concatenate et cat en int
 
 # Var globales a cause threads
 c=col.Counter()
@@ -63,10 +64,16 @@ def compte(bloc):
     pwa=np.array(bloc.splitlines())
     get_len = np.vectorize(lambda str: len(str))
     pwl=np.array(get_len(pwa))
-    passwords_length=np.add(passwords_length,pwl)
+    passwords_length=np.concatenate((passwords_length,pwl))
 
 def comptage(filename):
     global c, passwords_length,e,d
+    #remettre Zero les Var globales
+    e.clear()
+    d.clear()
+    c.clear()
+    passwords_length=[]
+
     gc.collect()
     ram=list(psutil.virtual_memory())[4]
     try:
@@ -98,5 +105,5 @@ def comptage(filename):
             thread.join()
     d=dict(c)
     e=calc(c)
-    return 0,d,passwords_length,e
-
+    f=passwords_length.astype(int)
+    return 0,d,f,e
