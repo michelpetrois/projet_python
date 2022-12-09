@@ -17,9 +17,9 @@ import csv
 lang='EN'
 core_number = os.cpu_count()
 mess = {}
-mess["EN"]={'1': 'Characters Analysis', '2': 'Downloading file', '3': 'Abort Download ?', '4': 'Select local File to Analyze', '5': 'OR', '6': 'Give the URL of the input file', '7': 'Launch Analyze', '8': 'Character Types', '9': 'Output Graphs', '10': 'Select Theme Name', '11': 'Select The Language', '12': 'English', '13': 'French', '14': 'Refresh Settings', '15': 'Input', '16': 'Settings', '17': 'No Filename', '18': 'File not found', '19': 'Browse', '20': 'Passwords by size', '21': 'Uppercase', '22': 'Lowercase', '23': 'Digits', '24': 'Characters', '25': 'Control', '26': 'Extended', '27': 'Character count', '28': 'Char', '29': 'Count', '30': 'Output Tables', "31": 'Font Choice', '32': 'Font size', '33': 'Types', '34': 'Numbers', '35': 'Caracteres by type', '36': 'length', '37': 'Export to CVS', '38': 'Error processing datas', '39': 'No access to tmp dir', '40': 'CSV files are on /tmp directory', '41': 'Failed'}
+mess["EN"]={'1': 'Characters Analysis', '2': 'Downloading file', '3': 'Abort Download ?', '4': 'Select local File to Analyze', '5': 'OR', '6': 'Give the URL of the input file', '7': 'Launch Analyze', '8': 'Character Types', '9': 'Pie Graph', '10': 'Select Theme Name', '11': 'Select The Language', '12': 'English', '13': 'French', '14': 'Refresh Settings', '15': 'Input', '16': 'Settings', '17': 'No Filename', '18': 'File not found', '19': 'Browse', '20': 'Passwords by size', '21': 'Uppercase', '22': 'Lowercase', '23': 'Digits', '24': 'Characters', '25': 'Control', '26': 'Extended', '27': 'Character count', '28': 'Char', '29': 'Count', '30': 'Output Tables', "31": 'Font Choice', '32': 'Font size', '33': 'Types', '34': 'Numbers', '35': 'Caracteres by type', '36': 'length', '37': 'Export to CVS', '38': 'Error processing datas', '39': 'No access to tmp dir', '40': 'CSV files are on /tmp directory', '41': 'Failed', '42': 'Histo Graph'}
 
-mess["FR"]={'1': "Analyse des caractères d'un fichier", '2': 'Téléchargement en cours', '3': 'Abandon du téléchargement ?', '4': 'Choisir le fichier local à analyser', '5': 'OU', '6': "Fournir l'URL du fichier à analyser", '7': "Lancer l'analyse", '8': 'Types de caractères', '9': 'Sortie Graphes', '10': 'Choix du theme', '11': 'Choix du langage', '12': 'Anglais', '13': 'Français', '14': "Relancer l'interface", '15': 'Entrée', '16': 'Paramètres', '17': 'Nom de fichier manquant', '18': 'Fichier introuvable', '19': 'Parcourir', '20': 'Mots de passe par taille', '21': 'Majuscules', '22': 'Minuscules', '23': 'Numérique', '24': 'Caractères', '25': 'Contrôle', '26': 'Etendus', '27': 'Comptage des caractères', '28': 'Carac', '29': 'Compt', '30': 'Sortie Tableaux', '31': 'Choix de la police', '32': 'Taille de la police', '33': 'Types', '34': 'Occurences', '35': 'Caractères par types', '36': 'Longueur', '37': 'Exporter en CSV', '38': 'Erreur dans le traitement des données', '39': 'repertoire tmp inaccessible', '40': 'Les fichiers CSV sont dans le répertoire /tmp', '41': 'En echec' }
+mess["FR"]={'1': "Analyse des caractères d'un fichier", '2': 'Téléchargement en cours', '3': 'Abandon du téléchargement ?', '4': 'Choisir le fichier local à analyser', '5': 'OU', '6': "Fournir l'URL du fichier à analyser", '7': "Lancer l'analyse", '8': 'Types de caractères', '9': 'Camembert', '10': 'Choix du theme', '11': 'Choix du langage', '12': 'Anglais', '13': 'Français', '14': "Relancer l'interface", '15': 'Entrée', '16': 'Paramètres', '17': 'Nom de fichier manquant', '18': 'Fichier introuvable', '19': 'Parcourir', '20': 'Mots de passe par taille', '21': 'Majuscules', '22': 'Minuscules', '23': 'Numérique', '24': 'Caractères', '25': 'Contrôle', '26': 'Etendus', '27': 'Comptage des caractères', '28': 'Carac', '29': 'Compt', '30': 'Sortie Tableaux', '31': 'Choix de la police', '32': 'Taille de la police', '33': 'Types', '34': 'Occurences', '35': 'Caractères par types', '36': 'Longueur', '37': 'Exporter en CSV', '38': 'Erreur dans le traitement des données', '39': 'repertoire tmp inaccessible', '40': 'Les fichiers CSV sont dans le répertoire /tmp', '41': 'En echec', '42': 'Histogramme' }
 
 control=""
 layout=[]
@@ -56,11 +56,11 @@ def data_to_graph(dict_letter, numpy_cpt, summary_dict, lang):
     draw_table(dict_letter, 9, 2)
 
     type_car=[mess[lang][str(i)] for i in range(21,27)]
-    entete = np.asarray(type_car)
+    entete_pie = np.asarray(type_car)
     type_val=list(summary_dict.values())
-    data = np.asarray(type_val)
-    titre = mess[lang]['35']
-    draw_pie(entete,data,titre, lang)
+    data_pie = np.asarray(type_val)
+    titre_pie = mess[lang]['35']
+    draw_pie(entete_pie,data_pie,titre_pie, lang)
 
     entete, data = np.unique(numpy_cpt, return_counts=True)
     titre  = mess[lang]['20']
@@ -92,7 +92,7 @@ def draw_histo(entete,data,titre,xlabel,ylabel, lang):
     taille = entete.size
     x_max = np.max(entete)
     y_max = np.max(data)
-    figureObject1, axesObject1 = plotter.subplots() # init de la frame pour les graphes, retoure une Figure (frame) et des axes, possible de definr la taille ici
+    figureObject1, axesObject1 = plotter.subplots(figsize=(15,5)) # init de la frame pour les graphes, retoure une Figure (frame) et des axes, possible de definr la taille ici
     axesObject1.bar(entete, data)
 
     axesObject1.set(xticks = np.arange(0, x_max+1, 1),
@@ -105,7 +105,7 @@ def draw_histo(entete,data,titre,xlabel,ylabel, lang):
 
     axesObject1.set_title(titre)
 
-    draw_figure(window['-GRAPH1-'].TKCanvas, figureObject1,'right')
+    draw_figure(window['-GRAPH2-'].TKCanvas, figureObject1,'left')
 
 
 
@@ -141,7 +141,7 @@ def draw_table(input_dict, nb_col, dest_table):
 
 def draw_figure(canvas, figure, side_pos):
     figure_canvas_agg = FigureCanvasTkAgg(figure, canvas)
-    figure_canvas_agg.get_tk_widget().pack(side=side_pos, fill='y', expand=1)
+    figure_canvas_agg.get_tk_widget().pack(side=side_pos, fill='both', expand=True)
     figure_canvas_agg.draw()
     return figure_canvas_agg
 
@@ -165,12 +165,14 @@ def main_window(lang='EN',theme=None,font_name='courier') :
     tab2_layout = [[sg.Text(mess[lang]['8'])],
                    [sg.Table(table_1, headings=table1_header,auto_size_columns=True, key='-TABLE1-', num_rows=1, hide_vertical_scroll=True)],
                    [sg.Text(mess[lang]['27'])],
-                   [sg.Table(table_2, headings=table2_header,auto_size_columns=True, key='-TABLE2-', num_rows=25, hide_vertical_scroll=False)],
+                   [sg.Table(table_2, headings=table2_header,auto_size_columns=True, key='-TABLE2-', num_rows=25, hide_vertical_scroll=False, vertical_scroll_only=False)],
                    [sg.HorizontalSeparator(pad=(2,2))],
                    [sg.VPush()],
                    [sg.Push(), sg.Button(mess[lang]['37'], expand_x=True, expand_y=True, key='-TO_CSV-', font=(font_name, font_size)), sg.Push()]]
     tab3_layout = [[sg.Text(mess[lang]['9'])],
                    [sg.Canvas(key='-GRAPH1-',expand_y=True)]]
+    tab3b_layout = [[sg.Text(mess[lang]['42'])],
+                   [sg.Canvas(key='-GRAPH2-',expand_y=True, background_color='pink', size=(1300,500))]]
     tab4_layout = [[ sg.Text(mess[lang]['10'], font=(font_name, font_size)), sg.Combo(values=sg.theme_list(), default_value='Random',auto_size_text=True, k='-THEME LIST-')],
                    [ sg.Text(mess[lang]['31'], font=(font_name, font_size)), sg.Combo(values=sg.Text.fonts_installed_list(), default_value='Courier', auto_size_text=True, key='-FONT_NAME-')],
                    [ sg.Text(mess[lang]['32'], font=(font_name, font_size)), sg.Spin([i for i in range(8,32,2)], initial_value=font_size, key='-FONT_SIZE-')],
@@ -181,6 +183,7 @@ def main_window(lang='EN',theme=None,font_name='courier') :
     tab_group_layout = [[ sg.TabGroup([[sg.Tab(mess[lang]['15'], tab1_layout, key='-TAB1-', font=(font_name)),
                           sg.Tab(mess[lang]['30'], tab2_layout, key='-TAB2-'),
                           sg.Tab(mess[lang]['9'], tab3_layout, key='-TAB3-'),
+                          sg.Tab(mess[lang]['42'], tab3b_layout, key='-TAB3B-'),
                           sg.Tab(mess[lang]['16'], tab4_layout, key='-TAB4-')]], expand_x=True, expand_y=True) ]]
 
     # The window layout - defines the entire window
