@@ -9,6 +9,7 @@ utiliser le lib tempfile pour recup le rep temp quelque de soit l'OS
 ### Prerequis
 - le code est developper en python3
 - Pour Windows, redistributable visualC++ 2022 : https://aka.ms/vs/17/release/vc_redist.x64.exe
+- Pour Linux, tkinter : sudo apt install python3-tk
 - installation d'un venv python (best practice)
   - python3 -m venv /path/to/new/virtual/environment
 - installation des dependances python
