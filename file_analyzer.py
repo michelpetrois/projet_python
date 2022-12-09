@@ -12,6 +12,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib
 matplotlib.use('TkAgg')
 import csv
+import tempfile
 
 
 mess = {}
@@ -19,7 +20,7 @@ mess["EN"]={'1': 'Characters Analysis', '2': 'Downloading file', '3': 'Abort Dow
 
 mess["FR"]={'1': "Analyse des caractères d'un fichier", '2': 'Téléchargement en cours', '3': 'Abandon du téléchargeent ?', '4': 'Langue', '5': 'OU', '6': 'Police', '7': 'Taille', '8': 'Types de caractères', '9': 'Sortie Graphes', '10': 'Name', '11': 'Choix du langage', '12': 'Anglais', '13': 'Français', '14': "Relancer l'interface", '15': 'Entrée', '16': 'Paramètres', '17': 'Nom de fichier manquant', '18': 'Fichier introuvable', '19': 'Parcourir', '20': 'Mots de passe par taille', '21': 'Majuscules', '22': 'Minuscules', '23': 'Numérique', '24': 'Caractères', '25': 'Contrôle', '26': 'Etendus', '27': 'Comptage des caractères', '28': 'Carac', '29': 'Compt', '30': 'Sortie Tableaux', '31': 'Choix de la police', '32': 'Taille de la police', '33': 'Types', '34': 'Occurences', '35': 'Caractères par types', '36': 'Longueur', '37': 'Exporter en CSV', '38': 'Erreur dans le traitement des données', '39': 'repertoire cible inaccessible', '40': 'Reussi', '41': 'En echec', '42': 'Fichier', '43': 'Sortie', '44': 'Aide', '45': 'Quoi', '46': 'Fichier en Entrée', '47': 'Lancer', '48': 'URL', '49': 'Destination des fichiers CSV' }
 
-version='V1.2'
+version='Version : 1.4'
 lang = 'EN'
 list_lang = [mess[lang]['12'], mess[lang]['13']]
 list_font_size = [ str(taille) for taille in range(8,31,2)]
@@ -37,7 +38,8 @@ table_2=[]
 table1_header=[mess[lang]['21'], mess[lang]['22'], mess[lang]['23'], mess[lang]['24'], mess[lang]['25'], mess[lang]['26']]
 lib_head = [mess[lang]['28'], mess[lang]['29']]
 table2_header=[alpha+'_'+str(num) for num in range(1,10) for alpha in lib_head]
-csv_target='/tmp'
+tmp_dir=tempfile.gettempdir()
+csv_target=tmp_dir
 summary_dict = {}
 
 def export_to_csv(entete, data, output_file):
@@ -46,7 +48,6 @@ def export_to_csv(entete, data, output_file):
         f = open(output_file, "w")
         writer = csv.writer(f)
     except Exception as e1:
-        print(e1)
         cr = False
     else:
         try:
@@ -54,7 +55,6 @@ def export_to_csv(entete, data, output_file):
             for ligne in data:
                 writer.writerow(ligne)
         except Exception as e2:
-            print(e2)
             cr = False
     finally:
         f.close()
@@ -65,43 +65,43 @@ def dl_file(url_file,chunk_size,out_file):
     go_dl = False
     content_bytes = 0
     http = urllib3.PoolManager()
-
-    r = http.request( 'GET', url_file, preload_content=False)
-    reader = io.BufferedReader(r, 8)
-    content_bytes = r.headers.get("Content-Length")
-    print("content_bytes", content_bytes)    
-    if content_bytes is None:
-        window['-ABORT_DL-'].update(visible=True )
-        content_bytes = 0
+    try:
+        r = http.request( 'GET', url_file, preload_content=False)
+    except:
+        sg.popup(mess[lang]['18'], no_titlebar=True, keep_on_top=True,  background_color='red', text_color='black')
     else:
-        content_bytes = int(content_bytes)
+        reader = io.BufferedReader(r, 8)
+        content_bytes = r.headers.get("Content-Length")
+        if content_bytes is None:
+            window['-ABORT_DL-'].update(visible=True )
+            content_bytes = 0
+        else:
+            content_bytes = int(content_bytes)
 
-    with open(out_file, "wb") as f:
-        dl_size = 0
-        #for chunk in r.stream(chunk_size):
-        while True:
-            try:
-                chunk = reader.read(chunk_size)
-            except:
-                r.release_conn()
-                go_dl = True
-                break
-            else:
-                f.write(chunk)
-                dl_size = dl_size + chunk_size
-                print(str(dl_size))
-                if content_bytes != 0:
-                    go_dl = sg.one_line_progress_meter(mess[lang]['2'],dl_size,content_bytes)
-                    if not go_dl:
-                        sg.one_line_progress_meter_cancel()
-                        break
+        with open(out_file, "wb") as f:
+            dl_size = 0
+            while True:
+                try:
+                    chunk = reader.read(chunk_size)
+                except:
+                    r.release_conn()
+                    go_dl = True
+                    break
                 else:
-                    event, values = window._ReadNonBlocking()
-                    if event == 'ABORT_DL':
-                        break
+                    f.write(chunk)
+                    dl_size = dl_size + chunk_size
+                    if content_bytes != 0:
+                        go_dl = sg.one_line_progress_meter(mess[lang]['2'],dl_size,content_bytes)
+                        if not go_dl:
+                            sg.one_line_progress_meter_cancel()
+                            break
+                    else:
+                        event, values = window._ReadNonBlocking()
+                        if event == 'ABORT_DL':
+                            break
 
-    if not go_dl:
-        os.remove(out_file)
+        if not go_dl:
+            os.remove(out_file)
 
 
 def draw_pie(entete,data,titre, lang):
@@ -212,8 +212,6 @@ def main():
     window = make_window()
     while True:
         event, values = window.read()       # type: str, dict
-        print(event, values, list_lang)
-        print('font', font,"size",size)
         if event == sg.WIN_CLOSED or event == mess[lang]['43']:
             break
         # Source
@@ -224,7 +222,6 @@ def main():
         # CSV
         if event == 'Destination':
             window['-CSV_TARGET-'].update(visible=True)
-            print("fonction destination CSV")
         if event == 'Export':
             if values['-CSV_TARGET-'] != '':
                 csv_target = values['-CSV_TARGET-']
@@ -259,7 +256,6 @@ def main():
                         sg.popup(mess[lang]['40'], no_titlebar=True, keep_on_top=True, background_color = 'green', text_color = 'black')
                     else:
                         sg.popup(mess[lang]['41'], no_titlebar=True, keep_on_top=True,  background_color='red', text_color='black')
-                print("fonction lancement de l'export")
         # Settings
         if event in list_lang:
             if event == mess[lang]['12']:
@@ -269,25 +265,25 @@ def main():
             list_lang = [mess[lang]['12'], mess[lang]['13']]
             table_1 = []
             table_2 = []
-            print("LANG", lang)
+            window.close()
             window = make_window()
         if event in list_theme:
             table_1 = []
             table_2 = []
             theme = event
-            print("THEME", theme)
+            window.close()
             window = make_window()
         if event in list_font_size:
             table_1 = []
             table_2 = []
             size = int(event)
-            print('SIZE', size)
+            window.close()
             window = make_window()
         if event in list_font_name:
             font =  event
             table_1 = []
             table_2 = []
-            print('FONT', font)
+            window.close()
             window = make_window()
         # divers
         if event == mess[lang]['44']:
@@ -301,9 +297,9 @@ def main():
             else:
                 if values['-INPUT_URL-'] != '':
                     file_url = values['-INPUT_URL-']
-                    if not os.path.isdir('/tmp'):
-                        os.makedirs('/tmp')
-                        filename = '/tmp/file_to_analyze.txt'
+                    if not os.path.isdir(tmp_dir):
+                        os.makedirs(tmp_dir)
+                        filename = tmp_dir+'/file_to_analyze.txt'
                     if os.path.exists(filename):
                         os.remove(filename)
                     dl_file(file_url,1024,filename)
@@ -313,7 +309,6 @@ def main():
             else:
                 if os.path.exists(filename):
                     rc, dict_letter, numpy_cpt, summary_dict = comptage(filename)
-                    print("numpy", numpy_cpt)
                     if rc != 0:
                         sg.popup(mess[lang]['38'], no_titlebar=True, keep_on_top=True, background_color='red', text_color='black')
                     else:
