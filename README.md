@@ -1,6 +1,8 @@
 ## Code projet utilisable
 - file_analyzer.py    : partie front
 - libcpt.py           : partie back
+- file_analyzer_win.exe : version compilée pour Windows64
+- file_analyzer_lin.exe : version compilée pour Linux
 
 ### Prerequis
 - le code est developper en python3
